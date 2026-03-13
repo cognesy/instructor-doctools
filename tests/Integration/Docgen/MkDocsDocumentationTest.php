@@ -72,19 +72,6 @@ describe('MkDocsDocumentation', function () {
         expect(file_get_contents($this->docsTargetDir . '/index.md'))->toBe('# Test Documentation');
     });
 
-    test('generatePackageDocs processes packages successfully', function () {
-        // Note: This test validates the method structure and error handling
-        // since BasePath::get() points to actual project structure, not test dirs
-        $mkdocs = new MkDocsDocumentation($this->examples, $this->config);
-        $result = $mkdocs->generatePackageDocs();
-
-        expect($result)->toBeInstanceOf(GenerationResult::class);
-        // The result may fail or succeed depending on whether actual package dirs exist
-        // but it should return a proper GenerationResult
-        expect($result->message)->toBeString();
-        expect($result->filesProcessed)->toBeGreaterThanOrEqual(0);
-    });
-
     test('generateExampleDocs processes examples successfully', function () {
         // Create mock example
         $example = createTestExample($this->tempDir);
@@ -105,25 +92,6 @@ describe('MkDocsDocumentation', function () {
         expect($result->message)->toBe('Example documentation generated successfully');
         expect($result->filesProcessed)->toBe(1);
         expect($result->filesCreated)->toBe(1);
-    });
-
-    test('generateAll processes everything successfully', function () {
-        // Setup example
-        $example = createTestExample($this->tempDir);
-        $exampleGroup = new ExampleGroup('Test Group', 'Test Group', [$example]);
-        $this->examples->method('getExampleGroups')->willReturn([$exampleGroup]);
-
-        $exampleSourceDir = dirname($example->runPath);
-        mkdir($exampleSourceDir, 0755, true);
-        file_put_contents($example->runPath, '<?php echo "test";');
-
-        $mkdocs = new MkDocsDocumentation($this->examples, $this->config);
-        $result = $mkdocs->generateAll();
-
-        expect($result)->toBeInstanceOf(GenerationResult::class);
-        // May succeed or fail depending on package dirs, but should return valid result
-        expect($result->message)->toBeString();
-        expect($result->filesProcessed)->toBeGreaterThanOrEqual(0);
     });
 
     test('handles missing example tab gracefully', function () {

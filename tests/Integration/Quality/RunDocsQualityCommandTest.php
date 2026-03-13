@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cognesy\Doctools\Tests\Feature\Quality;
+namespace Cognesy\Doctools\Tests\Integration\Quality;
 
 use Cognesy\Doctools\Quality\Commands\RunDocsQualityCommand;
 use Cognesy\Utils\Files;

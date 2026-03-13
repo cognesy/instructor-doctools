@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cognesy\Doctools\Tests\Feature\Docgen;
+namespace Cognesy\Doctools\Tests\Integration\Docgen;
 
 use Cognesy\Doctools\Docgen\Commands\GenerateLlmsCommand;
 use Cognesy\InstructorHub\Services\ExampleRepository;

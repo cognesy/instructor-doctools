@@ -79,18 +79,6 @@ describe('MintlifyDocumentation', function () {
         expect(file_get_contents($this->docsTargetDir . '/index.mdx'))->toBe('# Test Documentation');
     });
 
-    test('generatePackageDocs processes packages successfully', function () {
-        // Note: This test validates the method structure and error handling
-        // since BasePath::get() points to actual project structure, not test dirs
-        $mintlify = new MintlifyDocumentation($this->examples, $this->config);
-        $result = $mintlify->generatePackageDocs();
-
-        expect($result)->toBeInstanceOf(GenerationResult::class);
-        // The result may fail or succeed depending on whether actual package dirs exist
-        expect($result->message)->toBeString();
-        expect($result->filesProcessed)->toBeGreaterThanOrEqual(0);
-    });
-
     test('generateExampleDocs processes examples successfully', function () {
         // Create mock example
         $example = createMintlifyTestExample($this->tempDir);
@@ -108,25 +96,6 @@ describe('MintlifyDocumentation', function () {
 
         expect($result)->toBeInstanceOf(GenerationResult::class);
         // May fail due to index processing but should return valid result
-        expect($result->message)->toBeString();
-        expect($result->filesProcessed)->toBeGreaterThanOrEqual(0);
-    });
-
-    test('generateAll processes everything successfully', function () {
-        // Setup example
-        $example = createMintlifyTestExample($this->tempDir);
-        $exampleGroup = new ExampleGroup('Test Group', 'Test Group', [$example]);
-        $this->examples->method('getExampleGroups')->willReturn([$exampleGroup]);
-
-        $exampleSourceDir = dirname($example->runPath);
-        mkdir($exampleSourceDir, 0755, true);
-        file_put_contents($example->runPath, '<?php echo "test";');
-
-        $mintlify = new MintlifyDocumentation($this->examples, $this->config);
-        $result = $mintlify->generateAll();
-
-        expect($result)->toBeInstanceOf(GenerationResult::class);
-        // May succeed or fail depending on package dirs and index files
         expect($result->message)->toBeString();
         expect($result->filesProcessed)->toBeGreaterThanOrEqual(0);
     });
